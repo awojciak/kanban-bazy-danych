@@ -1,6 +1,6 @@
 # kanban-bazy-danych
 
-Projekt na przedmiot "Bazy danych" - narzędzie dso zarządzania tablicami kanban
+Projekt na przedmiot "Bazy danych" - narzędzie do zarządzania tablicami kanban
 
 Technologie:
 Baza danych - MongoDB
