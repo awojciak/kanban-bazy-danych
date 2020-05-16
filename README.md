@@ -3,9 +3,9 @@
 Projekt na przedmiot "Bazy danych" - narzędzie do zarządzania tablicami kanban
 
 Technologie:
-Baza danych - MongoDB
-Frontend - JavaScriptReact
-Serwer i API - Python, Flask
+* Baza danych - MongoDB
+* Frontend - JavaScriptReact
+ * Serwer i API - Express
 
 Plan:
 * zaprojektowanie kształtu bazy danych
