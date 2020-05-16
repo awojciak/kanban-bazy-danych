@@ -3,7 +3,8 @@
 
 1. Task
 * nazwa: string
-* czas: number
+* całkowity czas: number
+* czas dotychczas spędzony: number
 * opis: string
 * wykonwaca: wskazanie
 * backlog: wskazanie
