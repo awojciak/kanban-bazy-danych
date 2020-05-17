@@ -1,58 +1,58 @@
 import React from 'react';
 
-const Tag = ({ name }) => (
-    <div>{name}</div>
+export const Tag = ({ name }) => (
+    <div className="Tag">{name}</div>
 )
 
-const BacklogTile = () => {
+export const BacklogTile = () => {
     return (
-        <div>
-            <span>{data.title}</span>
-            <span>{`Effort: ${data.effort}`}</span>
-            <div>
+        <div className="BacklogTile">
+            <span className="TileTitle">{data.title}</span>
+            <span className="TileInfo">{`Effort: ${data.effort}`}</span>
+            <div className="TileTags">
                 {data.tags.map((tag) => <Tag name={tag} />)}
             </div>
         </div>
     );
 }
 
-const TaskTile = ({ data }) => {
+export const TaskTile = ({ data }) => {
     return (
-        <div>
-            <span>{data.title}</span>
-            <span>{`Całkowity czas: ${data.fullTime}`}</span>
-            <span>{`Czas dotychczas spędzony: ${data.usedTime}`}</span>
-            <span>{`Wykonawca: ${data.person}`}</span>
-            <div>
+        <div className="TaskTile">
+            <span className="TileTitle">{data.title}</span>
+            <span className="TileInfo">{`Całkowity czas: ${data.fullTime}`}</span>
+            <span className="TileInfo">{`Czas dotychczas spędzony: ${data.usedTime}`}</span>
+            <span className="TileInfo">{`Wykonawca: ${data.person}`}</span>
+            <div className="TileTags">
                 {data.tags.map((tag) => <Tag name={tag} />)}
             </div>
         </div>
     )
 }
 
-const BacklogRow = ({ data }) => {
+export const BacklogRow = ({ data }) => {
     return (
-        <div>
-            <div>
+        <div className="BacklogRow">
+            <div className="BacklogCol">
                 <BacklogTile />
             </div>
-            <div>
+            <div className="BacklogCol">
                 {data.tasks.filter((task) => task.status === 'ToDo').map(<TaskTile data={task} />)}
             </div>
-            <div>
+            <div className="BacklogCol">
                 {data.tasks.filter((task) => task.status === 'ToDo').map(<TaskTile data={task} />)}
             </div>
-            <div>
+            <div className="BacklogCol">
                 {data.tasks.filter((task) => task.status === 'ToDo').map(<TaskTile data={task} />)}
             </div>
         </div>
     );
 }
 
-const Table = () => {
+export const Table = () => {
     const backlogs = [];
     return (
-        <div>
+        <div className="Table">
             {backlogs.map((backlog) => <BacklogRow data={backlog} />)}
         </div>
     );
