@@ -1,7 +1,7 @@
 # Draft kształtu bazy danych
 
 
-1. Task
+## 1. Task
 * nazwa: string
 * całkowity czas: number
 * czas dotychczas spędzony: number
@@ -12,7 +12,7 @@
 * tagi: tablica<string>
 * czy zablokowany: boolean
 
-2. Backlog
+## 2. Backlog
 * nazwa: string
 * effort: string
 * opis: string
@@ -20,15 +20,15 @@
 * tagi: tablica<string>
 * czy zablokowany: boolean
 
-3. Sprint
+## 3. Sprint
 * numer: number
 * zespół: wskazanie
 * capacity: number
 
-4. Zespół
+## 4. Zespół
 * nazwa: string
 
-5. Osoba
+## 5. Osoba
 * imię: string
 * nazwisko: string
 * wymiar etatu: number
