@@ -1,0 +1,14 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+let sprint = new Schema({
+    number: {
+        type: Number,
+        min: 1
+    },
+    sprintForTeams: [Schema.Types.ObjectId],
+    start: Date,
+    end: Date
+});
+
+module.exports = mongoose.model('sprint', sprint);
