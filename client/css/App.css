@@ -2,37 +2,97 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* Table */
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Table {
+  width: 100%;
+  min-height: calc(100vh - 45px);
+
+  background-color: lightgoldenrodyellow;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.TableHeader {
+  width: 100%;
+
+  padding: 10px auto;
+
+  background-color: teal;
   color: white;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+
+  text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+/* Backlog */
+
+.BacklogRow {
+  width: 100%;
+
+  margin: 5px 0;
+
+  display: flex;
+  flex-direction: row;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.BacklogCol {
+  width: 25%;
+
+  border: 1px solid teal;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tiles */
+
+.BacklogTile, .TaskTile {
+  width: 80%;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.TaskTile {
+  border: 1px solid goldenrod;
+
+  background-color: lightyellow;
+}
+
+.BacklogTile {
+  border: 1px solid red;
+  background-color: salmon;
+}
+
+.TileTitle {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.TileInfo {
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.TileTags {
+}
+
+.Tag {
+  padding: 3px 5px;
+
+  border: 1px solid darkblue;
+
+  background-color: lightblue;
+
+  color: dodgerblue;
+
+  font-size: 11px;
+  font-family: Arial, Helvetica, sans-serif;
 }
