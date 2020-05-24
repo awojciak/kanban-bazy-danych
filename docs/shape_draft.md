@@ -7,7 +7,6 @@
 * czas dotychczas spędzony: number
 * opis: string
 * wykonwaca: wskazanie
-* backlog: wskazanie
 * status: enum
 * tagi: tablica<string>
 * czy zablokowany: boolean
@@ -19,6 +18,7 @@
 * sprint: wskazanie
 * tagi: tablica<string>
 * czy zablokowany: boolean
+* taski: tablicca<wskazanie>
 
 ## 3. Sprint zespołu
 * sprint: wskazanie

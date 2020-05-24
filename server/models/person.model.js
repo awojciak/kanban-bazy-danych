@@ -5,10 +5,10 @@ let person = new Schema({
     name: String,
     surname: String,
     timePart: {
-        type: Schema.Types.Decimal128,
+        type: Number,
         min: 0.0,
         max: 1.0
     }
-});
+}, { collection: 'person' });
 
-module.exports = mongoose.model('person', person);
+module.exports = mongoose.model('person', person, 'person');

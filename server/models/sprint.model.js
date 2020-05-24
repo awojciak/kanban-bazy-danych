@@ -9,6 +9,6 @@ let sprint = new Schema({
     sprintForTeams: [Schema.Types.ObjectId],
     start: Date,
     end: Date
-});
+}, { collection: 'sprint' });
 
-module.exports = mongoose.model('sprint', sprint);
+module.exports = mongoose.model('sprint', sprint, 'sprint');

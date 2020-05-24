@@ -6,7 +6,8 @@ let backlog = new Schema({
     effort: Number,
     description: String,
     sprintForTeam: Schema.Types.ObjectId,
-    blocked: Boolean
-});
+    blocked: Boolean,
+    tags: [String]
+}, { collection: 'backlog' });
 
-module.exports = mongoose.model('backlog', backlog);
+module.exports = mongoose.model('backlog', backlog, 'backlog');

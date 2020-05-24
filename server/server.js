@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 
-mongoose.connect('mongodb://localhost:27017/kanban');
+mongoose.connect('mongodb://127.0.0.1:27017/kanban', { useNewUrlParser: true });
 
 app.use('/', router);
 

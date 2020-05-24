@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 let task = new Schema({
     name: String,
     plannedTime: {
-        type: Schema.Types.Decimal128,
+        type: Number,
         min: 0,
     },
     spentTime: {
-        type: Schema.Types.Decimal128,
+        type: Number,
         min: 0,
     },
     description: String,
@@ -17,6 +17,6 @@ let task = new Schema({
     status: String,
     tags: [String],
     blocked: Boolean
-});
+}, { collection: 'task' });
 
-module.exports = mongoose.model('task', task);
+module.exports = mongoose.model('task', task, 'task');
