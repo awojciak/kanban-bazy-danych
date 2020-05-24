@@ -27,25 +27,14 @@ router.get('/sprintForTeam/:id', (req, res) => {
         backlog.find({ sprintForTeam: oid }, (err, innerRes) => {
           var backlogs = innerRes;
 
-          var newBacklogs = []
-          for(var b of backlogs) {
-            task.find({ backlog: b["_id"] }, (err, innerRes) => {
-              var nb = {
-                ...b["_doc"],
-                tasks: innerRes
-              };
-              newBacklogs.push(nb);
-
-              res.json(
-                {
-                  backlogs: newBacklogs,
-                  number: sprintData.number,
-                  start: sprintData.start.toDateString(),
-                  end: sprintData.end.toDateString()
-                }
-              );
-            });
-          }
+          res.json(
+            {
+              backlogs: backlogs,
+              number: sprintData.number,
+              start: sprintData.start.toDateString(),
+              end: sprintData.end.toDateString()
+            }
+          );
         });
       });
   });
@@ -98,6 +87,49 @@ router.get('/task/:id', (req, res) => {
     res.json({
       task: innerRes
     });
+  });
+});
+
+router.get('/tasksForBacklog/:id', (req, res) => {
+  var id = req.params.id;
+
+  task.find({ backlog: id }, (err, innerRes) => {
+    res.json({
+      tasks: innerRes
+    })
+  });
+});
+
+router.route('/newTask').post(
+  (req, res) => {
+    var newTask = new task();
+    newTask.name = req.body.name;
+    newTask.plannedTime = Number(req.body.plannedTime);
+    newTask.spentTime = 0;
+    newTask.backlog = mongoose.Types.ObjectId(req.body.backlog);
+    newTask.status = "ToDo";
+    newTask.person = null;
+    newTask.description = req.body.description;
+    newTask.blocked = Boolean(req.body.blocked);
+    newTask.tags = req.body.tags.split(' ').filter((tag) => tag !== '');
+
+    newTask.save((err) => {
+      if(!err) {
+        res.send("Dodano!");
+      }
+    });
+  }
+);
+
+router.get('/deleteTask/:id', (req, res) => {
+  var id = req.params.id;
+
+  task.findById(id, (err, innerRes) => {
+    innerRes.remove((err) => {
+      if(!err) {
+        res.send("Usunięto!");
+      }
+    })
   });
 });
 

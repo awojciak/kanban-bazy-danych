@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../css/App.css';
-import { BacklogModalForm, TaskModalForm } from './Forms';
+import { BacklogModalForm, TaskModalForm, AddTaskModalForm } from './Forms';
 
 export const Tag = ({ name }) => (
     <div className="Tag">{name}</div>
@@ -42,26 +42,38 @@ export const TaskTile = ({ data }) => {
 }
 
 export const BacklogRow = ({ data }) => {
+    const [tasks, setTasks] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    useEffect(() => {
+        axios.get('/tasksForBacklog/'+data["_id"]).then(
+            (res) => {
+                setTasks(res.data.tasks);
+            }
+        )
+    }, [data]);
+
     return (
         <div className="BacklogRow">
             <div className="BacklogCol">
                 <BacklogTile data={data}/>
+                <button onClick={() => setModalOpen(true)}>Dodaj taska</button>
+                <AddTaskModalForm backlogId={data["_id"]} isOpen={modalOpen} closeCb={() => setModalOpen(false)} />
             </div>
             <div className="BacklogCol">
-                {data.tasks.filter((task) => task.status === 'ToDo').map((task) => <TaskTile data={task} />)}
+                {tasks.filter((task) => task.status === 'ToDo').map((task) => <TaskTile data={task} />)}
             </div>
             <div className="BacklogCol">
-                {data.tasks.filter((task) => task.status === 'InProgress').map((task) => <TaskTile data={task} />)}
+                {tasks.filter((task) => task.status === 'InProgress').map((task) => <TaskTile data={task} />)}
             </div>
             <div className="BacklogCol">
-                {data.tasks.filter((task) => task.status === 'Done').map((task) => <TaskTile data={task} />)}
+                {tasks.filter((task) => task.status === 'Done').map((task) => <TaskTile data={task} />)}
             </div>
         </div>
     );
 }
 
 export const Table = ({ id }) => {
-
     const [sprint, setSprint] = useState(undefined);
 
     useEffect(() => {

@@ -34,19 +34,19 @@
 .BacklogRow {
   width: 100%;
 
-  margin: 5px 0;
-
   display: flex;
   flex-direction: row;
 }
 
 .BacklogCol {
   width: 25%;
+  padding: 20px 0;
 
   border: 1px solid rgb(31, 130, 187);;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 /* Tiles */
@@ -54,6 +54,7 @@
 .BacklogTile, .TaskTile {
   width: 80%;
   padding: 10px;
+  margin: 10px 0;
 
   display: flex;
   flex-direction: column;

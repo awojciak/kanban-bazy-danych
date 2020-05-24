@@ -41,6 +41,9 @@ Opis: Model pojedynczego zespołu
 
 ```
 {
+    sprint: ObjectId,
+    team: ObjectId,
+    capacity: Number,
 }
 ```
 
@@ -50,6 +53,9 @@ Opis: Model pojedynczej tablicy
 
 ```
 {
+    name: String,
+    surname: String,
+    timePart: Number
 }
 ```
 
