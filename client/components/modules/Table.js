@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/App.css';
+import { BacklogModalForm, TaskModalForm } from './Forms';
 
 export const Tag = ({ name }) => (
     <div className="Tag">{name}</div>
 )
 
 export const BacklogTile = ({ data }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <div className="BacklogTile">
             <span className="TileTitle">{data.name}</span>
@@ -15,11 +17,15 @@ export const BacklogTile = ({ data }) => {
             <div className="TileTags">
                 {data.tags.map((tag) => <Tag name={tag} />)}
             </div>
+            <button onClick={() => setModalOpen(true)}>Pokaż szczegóły</button>
+            <BacklogModalForm id={data["_id"]} isOpen={modalOpen} closeCb={() => setModalOpen(false)} />
         </div>
     );
 }
 
 export const TaskTile = ({ data }) => {
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <div className="TaskTile">
             <span className="TileTitle">{data.name}</span>
@@ -29,6 +35,8 @@ export const TaskTile = ({ data }) => {
             <div className="TileTags">
                 {data.tags.map((tag) => <Tag name={tag} />)}
             </div>
+            <button onClick={() => setModalOpen(true)}>Pokaż szczegóły</button>
+            <TaskModalForm id={data["_id"]} isOpen={modalOpen} closeCb={() => setModalOpen(false)} />
         </div>
     )
 }
@@ -52,64 +60,9 @@ export const BacklogRow = ({ data }) => {
     );
 }
 
-export const Table = () => {
-    let id = "5ec9ab3e19bfd005384958f3";
+export const Table = ({ id }) => {
 
     const [sprint, setSprint] = useState(undefined);
-
-    // let sprint = { // data mock, to remove later
-    //     number: 1,
-    //     start: '1.01.01',
-    //     end: '2.02.02',
-    //     backlogs: [
-    //         {
-    //             title: 'Pierwszy',
-    //             effort: 3,
-    //             tags: ['RTT', 'new'],
-    //             tasks: [
-    //                 {
-    //                     title: 'Task 1',
-    //                     plannedTime: 6,
-    //                     spentTime: 3,
-    //                     person: 'John Doe',
-    //                     tags: ['RTT'],
-    //                     status: 'ToDo'
-    //                 },
-    //                 {
-    //                     title: 'Task 2',
-    //                     plannedTime: 6,
-    //                     spentTime: 3,
-    //                     person: 'John Doe',
-    //                     tags: ['RTT'],
-    //                     status: 'Done'
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             title: 'Drugi',
-    //             effort: 3,
-    //             tags: ['RTT', 'new'],
-    //             tasks: [
-    //                 {
-    //                     title: 'Task 3',
-    //                     plannedTime: 6,
-    //                     spentTime: 3,
-    //                     person: 'John Doe',
-    //                     tags: ['RTT'],
-    //                     status: 'InProgress'
-    //                 },
-    //                 {
-    //                     title: 'Task 4',
-    //                     plannedTime: 6,
-    //                     spentTime: 3,
-    //                     person: 'John Doe',
-    //                     tags: ['RTT'],
-    //                     status: 'Done'
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // };
 
     useEffect(() => {
         axios.get('/sprintForTeam/'+id).then(
@@ -117,7 +70,7 @@ export const Table = () => {
                 setSprint(res.data);
             }
         )
-    }, []);
+    }, [id]);
 
     if(typeof sprint === 'undefined') {
         return (
@@ -127,7 +80,7 @@ export const Table = () => {
 
     return (
         <div className="Table">
-            <div className="TableHeader">{`Sprint ${sprint.number}: ${sprint.start}-${sprint.end}`}</div>
+            <div className="TableHeader">{`Sprint ${sprint.number}: ${sprint.start} - ${sprint.end}`}</div>
             {sprint.backlogs.map((backlog) => <BacklogRow data={backlog} />)}
         </div>
     );

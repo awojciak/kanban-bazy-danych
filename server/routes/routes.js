@@ -40,14 +40,64 @@ router.get('/sprintForTeam/:id', (req, res) => {
                 {
                   backlogs: newBacklogs,
                   number: sprintData.number,
-                  start: sprintData.start,
-                  end: sprintData.end
+                  start: sprintData.start.toDateString(),
+                  end: sprintData.end.toDateString()
                 }
               );
             });
           }
         });
       });
+  });
+});
+
+router.get('/getChooseFormData', (req, res) => {
+  sprint.aggregate([{ $project: {
+    "_id": 1,
+    "number": 1
+  }}]).then(
+    (sprints) => {
+      team.aggregate([{ $project: {
+        "_id": 1,
+        "name": 1
+      }}]).then((teams) => {
+        res.json({
+          sprints: sprints,
+          teams: teams
+        })
+      })
+    }
+  )
+});
+
+router.get('/getTabId/:sprint/:team', (req, res) => {
+  var sprintId = req.params.sprint;
+  var teamId = req.params.team;
+
+  sprintForTeam.findOne({ sprint: sprintId, team: teamId }, (req, innerRes) => {
+    res.json({
+      tabId: innerRes["_id"]
+    });
+  });
+});
+
+router.get('/backlog/:id', (req, res) => {
+  var id = req.params.id;
+
+  backlog.findById(id, (req, innerRes) => {
+    res.json({
+      backlog: innerRes
+    });
+  });
+});
+
+router.get('/task/:id', (req, res) => {
+  var id = req.params.id;
+
+  task.findById(id, (req, innerRes) => {
+    res.json({
+      task: innerRes
+    });
   });
 });
 

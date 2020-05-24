@@ -9,7 +9,7 @@
   width: 100%;
   min-height: calc(100vh - 45px);
 
-  background-color: lightgoldenrodyellow;
+  background-color: rgb(240, 240, 239);
 
   display: flex;
   flex-direction: column;
@@ -18,9 +18,9 @@
 .TableHeader {
   width: 100%;
 
-  padding: 10px auto;
+  padding: 15px auto;
 
-  background-color: teal;
+  background-color: rgb(31, 130, 187);
   color: white;
 
   font-family: Arial, Helvetica, sans-serif;
@@ -43,7 +43,7 @@
 .BacklogCol {
   width: 25%;
 
-  border: 1px solid teal;
+  border: 1px solid rgb(31, 130, 187);;
 
   display: flex;
   flex-direction: column;
@@ -82,10 +82,13 @@
 }
 
 .TileTags {
+  display: flex;
+  flex-direction: row;
 }
 
 .Tag {
   padding: 3px 5px;
+  margin: 5px;
 
   border: 1px solid darkblue;
 
@@ -93,6 +96,7 @@
 
   color: dodgerblue;
 
-  font-size: 11px;
+  font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
