@@ -133,4 +133,70 @@ router.get('/deleteTask/:id', (req, res) => {
   });
 });
 
+router.route('/updateTask').post(
+  (req, res) => {
+    var updates = {
+      name: req.body.name,
+      plannedTime: Number(req.body.plannedTime),
+      spentTime: Number(req.body.spentTime),
+      backlog: mongoose.Types.ObjectId(req.body.backlog),
+      status: req.body.status,
+      person: mongoose.Types.ObjectId(req.body.person),
+      description: req.body.description,
+      blocked: Boolean(req.body.blocked),
+      tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
+    }
+
+    task.update({ _id: req.body._id }, updates);
+  }
+);
+
+router.route('/newSprint').post(
+  (req, res) => {
+    var newSprint = new sprint();
+    newSprint.sprintForTeams = [];
+    newSprint.start = Date(req.body.start);
+    newSprint.end = Date(req.body.end);
+    newSprint.number = req.body.number;
+
+    var sftIds = [];
+
+    newSprint.save().then((value) => {
+      var sprintId = value._id;
+
+      return team.aggregate([{ $project: { "_id": 1, "sprintsForTeam": 1 } }]).then(
+        (teams) => {
+          for(let team of teams) {
+            let newSprintForTeam = new sprintForTeam();
+  
+            newSprintForTeam.sprint = sprintId;
+            newSprintForTeam.team = team._id;
+            newSprintForTeam.capacity = 0;
+
+            sprintForTeam.save().then(
+              (sft) => {
+                sftIds.push(sft._id);
+
+                var teamUpdate = {
+                  sprintsForTeam = team.sprintsForTeam + sft._id,
+                };
+
+                team.update({ _id: team._id }, teamUpdate);
+              }
+            );
+          }
+        }
+      ).then(
+        (_res) => {
+          var sprintUpdate = {
+            sprintForTeams: sftIds,
+          };
+
+          sprint.update({ _id: sprintId }, sprintUpdate);
+        }
+      );
+    })
+  }
+)
+
 module.exports = router;
