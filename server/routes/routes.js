@@ -178,7 +178,7 @@ router.route('/newSprint').post(
                 sftIds.push(sft._id);
 
                 var teamUpdate = {
-                  sprintsForTeam = team.sprintsForTeam + sft._id,
+                  sprintsForTeam: team.sprintsForTeam + sft._id,
                 };
 
                 team.update({ _id: team._id }, teamUpdate);
@@ -198,5 +198,34 @@ router.route('/newSprint').post(
     })
   }
 )
+
+router.get('/taggedTasks',
+  (req, res) => {
+    var tags = req.body.tags.split(' ').filter((tag) => tag !== '');
+    task.find(
+      { tags: { $all: tags } },
+      (err, innerRes) => {
+        res.json({
+          tasks: innerRes,
+        });
+      }
+    );
+  }
+);
+
+router.get('/taggedBacklog',
+  (req, res) => {
+    var tags = req.body.tags.split(' ').filter((tag) => tag !== '');
+    backlog.find(
+      { tags: { $all: tags } },
+      (err, innerRes) => {
+        res.json({
+          tasks: innerRes,
+        });
+      }
+    );
+  }
+);
+
 
 module.exports = router;

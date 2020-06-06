@@ -64,12 +64,27 @@ export const BacklogModalForm = ({ isOpen, closeCb, id }) => {
 
     return (
         <ReactModal isOpen={isOpen} style={style}>
-            {!!backlog && (<form>
-                <input name="name" value={backlog.name} />
-                <input name="effort" type="number" value={backlog.effort} />
-                <textarea name="description" value={backlog.description} />
-                <input name="tags" value={backlog.tags[0]} />
-                <input name="blocked" type="checkbox" checked={backlog.blocked} />
+            {!!backlog && (<form className="BacklogForm">
+                <label>
+                    Tytuł: 
+                    <input name="name" value={backlog.name} />
+                </label>
+                <label>
+                    Effort: 
+                    <input name="effort" type="number" value={backlog.effort} />
+                </label>
+                <label>
+                    Opis: 
+                    <textarea name="description" value={backlog.description} />
+                </label>
+                <label>
+                    Tagi: 
+                    <input name="tags" value={backlog.tags[0]} />
+                </label>
+                <label>
+                    Czy zablokowany: 
+                    <input name="blocked" type="checkbox" checked={backlog.blocked} />
+                </label>
             </form>)}
             <button onClick={closeCb}>Zamknij</button>
         </ReactModal>
@@ -106,15 +121,35 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
 
     return (
         <ReactModal isOpen={isOpen} style={style}>
-            {!!task && (<form>
-                <input name="name" value={task.name} />
-                <input name="plannedTime" type="number" value={task.plannedTime} />
-                <input name="spentTime" type="number" value={task.spentTime} />
-                <textarea name="description" value={task.description} />
-                <input name="tags" value={task.tags[0]} />
-                <input name="blocked" type="checkbox" checked={task.blocked} />
-                <input name="person" value={task.person} />
-                <input name="status" value={task.status} />
+            {!!task && (<form className="TaskForm">
+                <label>
+                    Tytuł:
+                    <input name="name" value={task.name} />
+                </label>
+                <label>
+                    Planowany czas:
+                    <input name="plannedTime" type="number" value={task.plannedTime} />
+                </label>
+                <label>
+                    Spędzony czas:
+                    <input name="spentTime" type="number" value={task.spentTime} />
+                </label>
+                <label>
+                    Opis:
+                    <textarea name="description" value={task.description} />
+                </label>
+                <label>
+                    Czy zablokowany:
+                    <input name="blocked" type="checkbox" checked={task.blocked} />
+                </label>
+                <label>
+                    Wykonawca:
+                    <input name="person" value={task.person} />
+                </label>
+                <label>
+                    Status:
+                    <input name="status" value={task.status} />
+                </label>
             </form>)}
             <button onClick={deleteTask}>Usuń taska</button>
             <button onClick={closeCb}>Zamknij</button>
@@ -162,12 +197,27 @@ export const AddTaskModalForm = ({ isOpen, closeCb, backlogId }) => {
 
     return (
         <ReactModal isOpen={isOpen} style={style}>
-            <form>
-                <input name="name" onChange={handleChange} />
-                <input name="plannedTime" type="number" onChange={handleChange} />
-                <textarea name="description" onChange={handleChange} />
-                <input name="tags" onChange={handleChange} />
-                <input name="blocked" type="checkbox" onChange={handleChange} />
+            <form className="AddTaskForm">
+                <label>
+                    Tytuł:
+                    <input name="name" onChange={handleChange} />
+                </label>
+                <label>
+                    Planowany czas:
+                    <input name="plannedTime" type="number" onChange={handleChange} />
+                </label>
+                <label>
+                    Opis:
+                    <textarea name="description" onChange={handleChange} />
+                </label>
+                <label>
+                    Tagi:
+                    <input name="tags" onChange={handleChange} />
+                </label>
+                <label>
+                    Czy zablokowany:
+                    <input name="blocked" type="checkbox" onChange={handleChange} />
+                </label>
                 <button type="button" onClick={saveTask}>Zapisz taska</button>
             </form>
             <button onClick={closeCb}>Zamknij</button>

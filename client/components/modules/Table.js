@@ -11,7 +11,7 @@ export const BacklogTile = ({ data }) => {
     const [modalOpen, setModalOpen] = useState(false);
 
     return (
-        <div className="BacklogTile">
+        <div className={`BacklogTile${data.blocked ? ' BlockedTile': ''}`}>
             <span className="TileTitle">{data.name}</span>
             <span className="TileInfo">{`Effort: ${data.effort}`}</span>
             <div className="TileTags">
@@ -27,7 +27,7 @@ export const TaskTile = ({ data }) => {
     const [modalOpen, setModalOpen] = useState(false);
 
     return (
-        <div className="TaskTile">
+        <div className={`TaskTile${data.blocked ? ' BlockedTile': ''}`}>
             <span className="TileTitle">{data.name}</span>
             <span className="TileInfo">{`Całkowity czas: ${data.plannedTime}`}</span>
             <span className="TileInfo">{`Czas dotychczas spędzony: ${data.spentTime}`}</span>
