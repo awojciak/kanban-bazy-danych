@@ -110,7 +110,7 @@ router.route('/newTask').post(
     newTask.status = "ToDo";
     newTask.person = null;
     newTask.description = req.body.description;
-    newTask.blocked = Boolean(req.body.blocked);
+    newTask.blocked = (req.body.blocked === 'true');
     newTask.tags = req.body.tags.split(' ').filter((tag) => tag !== '');
 
     newTask.save((err) => {
@@ -143,7 +143,7 @@ router.route('/updateTask').post(
       status: req.body.status,
       person: mongoose.Types.ObjectId(req.body.person),
       description: req.body.description,
-      blocked: Boolean(req.body.blocked),
+      blocked: (req.body.blocked === 'true'),
       tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
     }
 
@@ -199,7 +199,7 @@ router.route('/newSprint').post(
   }
 )
 
-router.get('/taggedTasks',
+router.route('/taggedTasks').post(
   (req, res) => {
     var tags = req.body.tags.split(' ').filter((tag) => tag !== '');
     task.find(
@@ -213,14 +213,14 @@ router.get('/taggedTasks',
   }
 );
 
-router.get('/taggedBacklog',
+router.route('/taggedBacklogs').post(
   (req, res) => {
     var tags = req.body.tags.split(' ').filter((tag) => tag !== '');
     backlog.find(
       { tags: { $all: tags } },
       (err, innerRes) => {
         res.json({
-          tasks: innerRes,
+          backlogs: innerRes,
         });
       }
     );

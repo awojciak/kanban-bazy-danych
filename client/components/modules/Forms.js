@@ -224,3 +224,107 @@ export const AddTaskModalForm = ({ isOpen, closeCb, backlogId }) => {
         </ReactModal>
     );
 }
+
+export const SearchTasksModal = ({ isOpen, closeCb }) => {
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    };
+
+    const [tasks, setTasks] = useState(undefined);
+    const [tags, setTags] = useState(undefined);
+
+    const searchHandler = () => {
+        axios.post(
+            '/taggedTasks',
+            querystring.stringify({ tags: tags }), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).then(
+            (res) => {
+                setTasks(res.data.tasks);
+            }
+        );
+    };
+
+    const handleChange = (e) => {
+        setTags(e.target.value);
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className={'SearchForm'}>
+                <label>
+                    Tagi:
+                    <input name="tags" onChange={handleChange}/>
+                </label>
+                <button type="button" onClick={searchHandler}>Szukaj</button>
+            </form>
+            {typeof tasks !== 'undefined' && (
+                <div className={'SearchWrapper'}>
+                    {tasks.map((task) => (
+                        <button>{task.name}</button>
+                    ))}
+                </div>
+            )}
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    )
+}
+
+export const SearchBacklogsModal = ({ isOpen, closeCb }) => {
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    };
+
+    const [backlogs, setBacklogs] = useState(undefined);
+    const [tags, setTags] = useState(undefined);
+
+    const searchHandler = () => {
+        axios.post(
+            '/taggedBacklogs',
+            querystring.stringify({ tags: tags }), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).then(
+            (res) => {
+                setBacklogs(res.data.backlogs);
+            }
+        );
+    };
+
+    const handleChange = (e) => {
+        setTags(e.target.value);
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className={'SearchForm'}>
+                <label>
+                    Tagi:
+                    <input name="tags" onChange={handleChange}/>
+                </label>
+                <button type="button" onClick={searchHandler}>Szukaj</button>
+            </form>
+            {typeof backlogs !== 'undefined' && (
+                <div className={'SearchWrapper'}>
+                    {backlogs.map((backlog) => (
+                        <button>{backlog.name}</button>
+                    ))}
+                </div>
+            )}
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    )
+}

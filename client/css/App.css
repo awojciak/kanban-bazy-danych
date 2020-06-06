@@ -109,7 +109,7 @@
 
 /* Forms */
 
-.TaskForm, .BacklogForm, .AddTaskForm {
+.TaskForm, .BacklogForm, .AddTaskForm, .SearchWrapper {
   display: flex;
   flex-direction: column;
 }
