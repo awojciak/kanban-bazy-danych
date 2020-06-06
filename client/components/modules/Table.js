@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../css/App.css';
-import { BacklogModalForm, TaskModalForm, AddTaskModalForm } from './Forms';
+import { BacklogModalForm, TaskModalForm, AddTaskModalForm, AddBacklogModalForm } from './Forms';
 
 export const Tag = ({ name }) => (
     <div className="Tag">{name}</div>
@@ -75,6 +75,7 @@ export const BacklogRow = ({ data }) => {
 
 export const Table = ({ id }) => {
     const [sprint, setSprint] = useState(undefined);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         axios.get('/sprintForTeam/'+id).then(
@@ -92,7 +93,11 @@ export const Table = ({ id }) => {
 
     return (
         <div className="Table">
-            <div className="TableHeader">{`Sprint ${sprint.number}: ${sprint.start} - ${sprint.end}`}</div>
+            <div className="TableHeader">
+                {`Sprint ${sprint.number}: ${sprint.start} - ${sprint.end}`}
+                <button onClick={() => setModalOpen(true)}>Nowy backlog</button>
+                <AddBacklogModalForm isOpen={modalOpen} closeCb={() => setModalOpen(false)} tabId={id} />
+            </div>
             {sprint.backlogs.map((backlog) => <BacklogRow data={backlog} />)}
         </div>
     );

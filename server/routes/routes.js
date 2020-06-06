@@ -140,10 +140,10 @@ router.route('/updateTask').post(
       plannedTime: Number(req.body.plannedTime),
       spentTime: Number(req.body.spentTime),
       status: req.body.status,
-      person: req.body.person === 'null' ? null : mongoose.Types.ObjectId(req.body.person),
+      // person: req.body.person === 'null' ? null : mongoose.Types.ObjectId(req.body.person),
       description: req.body.description,
       blocked: (req.body.blocked === 'true'),
-      // tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
+      tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
     }
 
     task.update({ _id: req.body._id }, updates, (err, _raw) => {
@@ -167,37 +167,41 @@ router.route('/newSprint').post(
     newSprint.save().then((value) => {
       var sprintId = value._id;
 
-      return team.aggregate([{ $project: { "_id": 1, "sprintsForTeam": 1 } }]).then(
+      team.aggregate([{ $project: { "_id": 1, "sprintsForTeam": 1 } }]).then(
         (teams) => {
-          for(let team of teams) {
+          return Promise.all(teams.map((singleTeam) => {
             let newSprintForTeam = new sprintForTeam();
   
             newSprintForTeam.sprint = sprintId;
-            newSprintForTeam.team = team._id;
-            newSprintForTeam.capacity = 0;
+            newSprintForTeam.team = singleTeam._id;
+            newSprintForTeam.goal = '';
 
-            sprintForTeam.save().then(
+            return newSprintForTeam.save().then(
               (sft) => {
                 sftIds.push(sft._id);
 
                 var teamUpdate = {
-                  sprintsForTeam: team.sprintsForTeam + sft._id,
+                  sprintsForTeam: singleTeam.sprintsForTeam + sft._id,
                 };
 
-                team.update({ _id: team._id }, teamUpdate);
+                team.update({ _id: singleTeam._id }, teamUpdate);
               }
             );
-          }
+          })).then(
+            (_res) => {
+              var sprintUpdate = {
+                sprintForTeams: sftIds,
+              };
+    
+              sprint.update({ _id: sprintId }, sprintUpdate, (err, _raw) => {
+                if(!err) {
+                  res.send("Zapisano!");
+                }
+              });
+            }
+          );
         }
-      ).then(
-        (_res) => {
-          var sprintUpdate = {
-            sprintForTeams: sftIds,
-          };
-
-          sprint.update({ _id: sprintId }, sprintUpdate);
-        }
-      );
+      )
     })
   }
 )
@@ -230,5 +234,52 @@ router.route('/taggedBacklogs').post(
   }
 );
 
+router.route('/newBacklog').post(
+  (req, res) => {
+    var newBacklog = new backlog();
+    newBacklog.name = req.body.name;
+    newBacklog.effort = Number(req.body.effort);
+    newBacklog.sprintForTeam = mongoose.Types.ObjectId(req.body.sprintForTeam);
+    newBacklog.description = req.body.description;
+    newBacklog.blocked = (req.body.blocked === 'true');
+    newBacklog.tags = req.body.tags.split(' ').filter((tag) => tag !== '');
+
+    newBacklog.save((err) => {
+      if(!err) {
+        res.send("Dodano!");
+      }
+    });
+  }
+);
+
+router.get('/deleteBacklog/:id', (req, res) => {
+  var id = req.params.id;
+
+  backlog.findById(id, (err, innerRes) => {
+    innerRes.remove((err) => {
+      if(!err) {
+        res.send("Usunięto!");
+      }
+    })
+  });
+});
+
+router.route('/updateBacklog').post(
+  (req, res) => {
+    var updates = {
+      name: req.body.name,
+      effort: Number(req.body.effort),
+      description: req.body.description,
+      blocked: (req.body.blocked === 'true'),
+      tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
+    }
+
+    backlog.update({ _id: req.body._id }, updates, (err, _raw) => {
+      if(!err) {
+        res.send("Zapisano!");
+      }
+    });
+  }
+);
 
 module.exports = router;

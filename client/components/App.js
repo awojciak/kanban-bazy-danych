@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import '../css/App.css';
 import { Table } from './modules/Table';
-import { ChooseTabForm, SearchTasksModal, SearchBacklogsModal } from './modules/Forms'
+import { ChooseTabForm, SearchTasksModal, SearchBacklogsModal, AddSprintModalForm } from './modules/Forms'
 import axios from 'axios';
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
   let [teams, setTeams] = useState([]);
   const [tagsSearchModalOpen, setTagsSearchModalOpen] = useState(false);
   const [backlogsSearchModalOpen, setBacklogsSearchModalOpen] = useState(false);
+  const [newSprintModalOpen, setNewSprintModalOpen] = useState(false);
 
   useEffect(() => {
     axios.get('/getChooseFormData').then(
@@ -38,8 +39,13 @@ function App() {
           <Route path={'/'}>
             <button onClick={() => setTagsSearchModalOpen(true)}>Wyszukaj taski po tagach</button>
             <SearchTasksModal isOpen={tagsSearchModalOpen} closeCb={() => setTagsSearchModalOpen(false)} />
+
             <button onClick={() => setBacklogsSearchModalOpen(true)}>Wyszukaj backlogi po tagach</button>
             <SearchBacklogsModal isOpen={backlogsSearchModalOpen} closeCb={() => setBacklogsSearchModalOpen(false)} />
+
+            <button onClick={() => setNewSprintModalOpen(true)}>Nowy sprint</button>
+            <AddSprintModalForm isOpen={newSprintModalOpen} closeCb={() => setNewSprintModalOpen(false)} />
+
             {sprints.length > 0 && teams.length > 0 && <ChooseTabForm sprints={sprints} teams={teams} callback={chooseCb}/>}
             {(tabId !== null) 
               ? (
