@@ -139,15 +139,18 @@ router.route('/updateTask').post(
       name: req.body.name,
       plannedTime: Number(req.body.plannedTime),
       spentTime: Number(req.body.spentTime),
-      backlog: mongoose.Types.ObjectId(req.body.backlog),
       status: req.body.status,
-      person: mongoose.Types.ObjectId(req.body.person),
+      person: req.body.person === 'null' ? null : mongoose.Types.ObjectId(req.body.person),
       description: req.body.description,
       blocked: (req.body.blocked === 'true'),
-      tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
+      // tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
     }
 
-    task.update({ _id: req.body._id }, updates);
+    task.update({ _id: req.body._id }, updates, (err, _raw) => {
+      if(!err) {
+        res.send("Zapisano!");
+      }
+    });
   }
 );
 

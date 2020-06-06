@@ -119,38 +119,60 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
         });
     }
 
+    const updateTask = () => {
+        axios.post(
+            '/updateTask',
+            querystring.stringify(task), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).finally(() => {
+            closeCb()
+        })
+    }
+
+    const handleChange = (e) => {
+        setTask({
+            ...task,
+            [e.target.name]: e.target.value,
+        })
+    }
+
     return (
         <ReactModal isOpen={isOpen} style={style}>
             {!!task && (<form className="TaskForm">
                 <label>
                     Tytuł:
-                    <input name="name" value={task.name} />
+                    <input name="name" value={task.name} onChange={handleChange} />
                 </label>
                 <label>
                     Planowany czas:
-                    <input name="plannedTime" type="number" value={task.plannedTime} />
+                    <input name="plannedTime" type="number" value={task.plannedTime} onChange={handleChange} />
                 </label>
                 <label>
                     Spędzony czas:
-                    <input name="spentTime" type="number" value={task.spentTime} />
+                    <input name="spentTime" type="number" value={task.spentTime} onChange={handleChange} />
                 </label>
                 <label>
                     Opis:
-                    <textarea name="description" value={task.description} />
+                    <textarea name="description" value={task.description} onChange={handleChange} />
                 </label>
                 <label>
                     Czy zablokowany:
-                    <input name="blocked" type="checkbox" checked={task.blocked} />
+                    <input name="blocked" type="checkbox" checked={task.blocked} onChange={handleChange} />
                 </label>
                 <label>
                     Wykonawca:
-                    <input name="person" value={task.person} />
+                    <input name="person" value={task.person} onChange={handleChange} />
                 </label>
                 <label>
                     Status:
-                    <input name="status" value={task.status} />
+                    <input name="status" value={task.status} onChange={handleChange} />
                 </label>
             </form>)}
+            <button onClick={updateTask}>Zapisz zmiany</button>
             <button onClick={deleteTask}>Usuń taska</button>
             <button onClick={closeCb}>Zamknij</button>
         </ReactModal>
