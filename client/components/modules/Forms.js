@@ -305,6 +305,7 @@ export const SearchTasksModal = ({ isOpen, closeCb }) => {
 
     const [tasks, setTasks] = useState(undefined);
     const [tags, setTags] = useState(undefined);
+    const [modalOpen, setModalOpen] = useState(-1);
 
     const searchHandler = () => {
         axios.post(
@@ -337,8 +338,11 @@ export const SearchTasksModal = ({ isOpen, closeCb }) => {
             </form>
             {typeof tasks !== 'undefined' && (
                 <div className={'SearchWrapper'}>
-                    {tasks.map((task) => (
-                        <button>{task.name}</button>
+                    {tasks.map((task, index) => (
+                        <>
+                            <button onClick={() => setModalOpen(index)}>{task.name}</button>
+                            <TaskModalForm id={task._id} isOpen={modalOpen === index} closeCb={() => setModalOpen(-1)} />
+                        </>
                     ))}
                 </div>
             )}
@@ -357,6 +361,7 @@ export const SearchBacklogsModal = ({ isOpen, closeCb }) => {
 
     const [backlogs, setBacklogs] = useState(undefined);
     const [tags, setTags] = useState(undefined);
+    const [modalOpen, setModalOpen] = useState(-1);
 
     const searchHandler = () => {
         axios.post(
@@ -389,8 +394,11 @@ export const SearchBacklogsModal = ({ isOpen, closeCb }) => {
             </form>
             {typeof backlogs !== 'undefined' && (
                 <div className={'SearchWrapper'}>
-                    {backlogs.map((backlog) => (
-                        <button>{backlog.name}</button>
+                    {backlogs.map((backlog, index) => (
+                        <>
+                            <button onClick={() => setModalOpen(index)}>{backlog.name}</button>
+                            <BacklogModalForm id={backlog._id} isOpen={modalOpen === index} closeCb={() => setModalOpen(-1)} />
+                        </>
                     ))}
                 </div>
             )}
