@@ -43,11 +43,15 @@ Opis: Model pojedynczego zespołu
 {
     sprint: ObjectId,
     team: ObjectId,
-    capacity: Number,
+    goal: String,
 }
 ```
 
 Opis: Model pojedynczej tablicy
+
+sprint - id sprintu, dla którego obowiązuje tablica
+team - id zespołu, do którego należy tablica
+goal - cel sprintu, informacja pojawiająca się na górze tablicy, jeżeli jest niepusta
 
 ## 6. Person
 
@@ -60,3 +64,7 @@ Opis: Model pojedynczej tablicy
 ```
 
 Opis: Model pojedynczej osoby
+
+name - imię
+surname - nazwisko
+timePart - wymiar etatu (od 0 do 1)
