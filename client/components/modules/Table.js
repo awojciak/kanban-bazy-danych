@@ -1,7 +1,44 @@
 import React, { useEffect, useState } from 'react';
+import ReactModal from 'react-modal';
 import axios from 'axios';
 import '../../css/App.css';
 import { BacklogModalForm, TaskModalForm, AddTaskModalForm, AddBacklogModalForm } from './Forms';
+
+ReactModal.setAppElement("#root")
+
+export const PersonModal = ({ isOpen, closeCb, personId }) => {
+    const [person, setPerson] = useState(undefined);
+
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    }
+
+    useEffect(() => {
+        if(isOpen) {
+            axios.get('/person/'+personId).then(
+                (res) => {
+                    setPerson(res.data.person);
+                }
+            )
+        }
+    }, [isOpen]);
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            {!!person && (
+                <div className="TaskForm">
+                    <span>{`Imię: ${person.name}`}</span>
+                    <span>{`Nazwisko: ${person.surname}`}</span>
+                    <span>{`Wymiar pracy: ${person.timePart}`}</span>
+                </div>
+            )}
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    );
+}
 
 export const Tag = ({ name }) => (
     <div className="Tag">{name}</div>
@@ -25,13 +62,25 @@ export const BacklogTile = ({ data }) => {
 
 export const TaskTile = ({ data }) => {
     const [modalOpen, setModalOpen] = useState(false);
+    const [personOpen, setPersonOpen] = useState(false);
 
     return (
         <div className={`TaskTile${data.blocked ? ' BlockedTile': ''}`}>
             <span className="TileTitle">{data.name}</span>
             <span className="TileInfo">{`Całkowity czas: ${data.plannedTime}`}</span>
             <span className="TileInfo">{`Czas dotychczas spędzony: ${data.spentTime}`}</span>
-            <span className="TileInfo">{`Wykonawca: ${data.person}`}</span>
+            {
+                data.person !== null
+                ? (
+                    <>
+                        <button onClick={() => setPersonOpen(true)}>Informacje o wykonawcy</button>
+                        <PersonModal personId={data.person} isOpen={personOpen} closeCb={() => setPersonOpen(false)} />
+                    </>
+                )
+                : (
+                    <span className="TileInfo">Bez wykonawcy</span>
+                )
+            }
             <div className="TileTags">
                 {data.tags.map((tag) => <Tag name={tag} />)}
             </div>

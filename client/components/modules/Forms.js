@@ -127,6 +127,7 @@ export const BacklogModalForm = ({ isOpen, closeCb, id }) => {
 
 export const TaskModalForm = ({ isOpen, closeCb, id }) => {
     const [task, setTask] = useState(undefined);
+    const [members, setMembers] = useState([]);
 
     const style = {
         content: {
@@ -143,6 +144,7 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
                         ...res.data.task,
                         tags: res.data.task.tags.reduce((prev, next) => (prev === '' ? next : prev + ' ' + next), '')
                     });
+                    setMembers(res.data.members);
                 }
             )
         }
@@ -202,7 +204,12 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
                 </label>
                 <label>
                     Wykonawca:
-                    <input name="person" value={task.person} onChange={handleChange} />
+                    <select name="person" value={task.person} onChange={handleChange}>
+                        {members.map((member) => (
+                            <option value={member._id}>{`${member.name} ${member.surname}`}</option>
+                        ))}
+                        <option value={null}>Brak wykonawcy</option>
+                    </select>
                 </label>
                 <label>
                     Status:

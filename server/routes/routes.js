@@ -84,8 +84,17 @@ router.get('/task/:id', (req, res) => {
   var id = req.params.id;
 
   task.findById(id, (req, innerRes) => {
-    res.json({
-      task: innerRes
+    backlog.findById(innerRes.backlog, (req, blRes) => {
+      sprintForTeam.findById(blRes.sprintForTeam, (req, sftRes) => {
+        team.findById(sftRes.team, (req, teamRes) => {
+          person.find({ _id: { $in: teamRes.members } }, (req, peopleRes) => {
+            res.json({
+              task: innerRes,
+              members: peopleRes,
+            });
+          });
+        });
+      });
     });
   });
 });
@@ -140,7 +149,7 @@ router.route('/updateTask').post(
       plannedTime: Number(req.body.plannedTime),
       spentTime: Number(req.body.spentTime),
       status: req.body.status,
-      // person: req.body.person === 'null' ? null : mongoose.Types.ObjectId(req.body.person),
+      person: (req.body.person === 'Brak wykonawcy') ? null : mongoose.Types.ObjectId(req.body.person),
       description: req.body.description,
       blocked: (req.body.blocked === 'true'),
       tags: req.body.tags.split(' ').filter((tag) => tag !== ''),
@@ -158,8 +167,8 @@ router.route('/newSprint').post(
   (req, res) => {
     var newSprint = new sprint();
     newSprint.sprintForTeams = [];
-    newSprint.start = Date(req.body.start);
-    newSprint.end = Date(req.body.end);
+    newSprint.start = new Date(req.body.start);
+    newSprint.end = new Date(req.body.end);
     newSprint.number = req.body.number;
 
     var sftIds = [];
@@ -181,10 +190,12 @@ router.route('/newSprint').post(
                 sftIds.push(sft._id);
 
                 var teamUpdate = {
-                  sprintsForTeam: singleTeam.sprintsForTeam + sft._id,
+                  sprintsForTeam: singleTeam.sprintsForTeam.concat([sft._id]),
                 };
 
                 team.update({ _id: singleTeam._id }, teamUpdate);
+
+                return true;
               }
             );
           })).then(
@@ -277,6 +288,64 @@ router.route('/updateBacklog').post(
     backlog.update({ _id: req.body._id }, updates, (err, _raw) => {
       if(!err) {
         res.send("Zapisano!");
+      }
+    });
+  }
+);
+
+router.get('/person/:id', (req, res) => {
+  var id = req.params.id;
+
+  person.findById(id, (req, innerRes) => {
+    res.json({
+      person: innerRes
+    });
+  });
+});
+
+router.get('/team/:id', (req, res) => {
+  var id = req.params.id;
+
+  team.findById(id, (req, innerRes) => {
+    res.json({
+      team: innerRes
+    });
+  });
+});
+
+router.route('/newPerson').post(
+  (req, res) => {
+    var newPerson = new person();
+    newPerson.name = req.body.name;
+    newPerson.surname = req.body.surname;
+    newPerson.timePart = req.body.timePart;
+    
+    newPerson.save((err, doc) => {
+      team.findById(req.body.teamId, (req, innerRes) => {
+        var teamUpdate = {
+          members: innerRes.members.concat([doc._id])
+        }
+
+        team.update({ _id: innerRes.id }, update, (err, _raw) => {
+          if(!err) {
+            res.send("Dodano!");
+          }
+        })
+      });
+    });
+  }
+);
+
+router.route('/newTeam').post(
+  (req, res) => {
+    var newTeam = new team();
+    newTeam.name = req.body.name;
+    newTeam.members = [];
+    newTeam.sprintsForTeam = []
+
+    newTeam.save((err) => {
+      if(!err) {
+        res.send("Dodano!");
       }
     });
   }
