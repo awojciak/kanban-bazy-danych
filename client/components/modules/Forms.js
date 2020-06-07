@@ -517,3 +517,110 @@ export const AddSprintModalForm = ({ isOpen, closeCb }) => {
         </ReactModal>
     );
 }
+
+export const AddTeamModalForm = ({ isOpen, closeCb }) => {
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    }
+
+    let team = {
+        name: '',
+    };
+
+    const saveTeam = () => {
+        axios.post(
+            '/newTeam',
+            querystring.stringify(team), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).finally(() => {
+            closeCb()
+        })
+    }
+
+    const handleChange = (e) => {
+        team[e.target.name] = e.target.value;
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className="BacklogForm">
+                <label>
+                    Nazwa: 
+                    <input name="name" onChange={handleChange} />
+                </label>
+            </form>
+            <button type="button" onClick={saveTeam}>Zapisz team</button>
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    );
+}
+
+export const AddPersonModalForm = ({ isOpen, closeCb, teams }) => {
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    }
+
+    let person = {
+        name: '',
+        surname: '',
+        timePart: 0,
+        team: teams[0]["_id"],
+    };
+
+    const savePerson = () => {
+        axios.post(
+            '/newPerson',
+            querystring.stringify(person), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).finally(() => {
+            closeCb()
+        })
+    }
+
+    const handleChange = (e) => {
+        person[e.target.name] = e.target.value;
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className="BacklogForm">
+                <label>
+                    Imię: 
+                    <input name="name" onChange={handleChange} />
+                </label>
+                <label>
+                    Nazwisko: 
+                    <input name="surname" onChange={handleChange} />
+                </label>
+                <label>
+                    Wymiar etatu: 
+                    <input name="timePart" type="number" onChange={handleChange} />
+                </label>
+                <label>
+                   Zespół: 
+                    <select name="team" onChange={handleChange}>
+                        {teams.map((team) => (
+                            <option value={team["_id"]}>{`Zespół ${team.name}`}</option>
+                        ))}
+                    </select>
+                </label>
+            </form>
+            <button type="button" onClick={savePerson}>Zapisz osobę</button>
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    );
+}

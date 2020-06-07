@@ -321,12 +321,12 @@ router.route('/newPerson').post(
     newPerson.timePart = req.body.timePart;
     
     newPerson.save((err, doc) => {
-      team.findById(req.body.teamId, (req, innerRes) => {
+      team.findById(req.body.team, (req, innerRes) => {
         var teamUpdate = {
           members: innerRes.members.concat([doc._id])
         }
 
-        team.update({ _id: innerRes.id }, update, (err, _raw) => {
+        team.update({ _id: innerRes.id }, teamUpdate, (err, _raw) => {
           if(!err) {
             res.send("Dodano!");
           }
