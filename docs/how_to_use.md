@@ -28,4 +28,4 @@ Odbywa się za pomocą formularza dostępnego po kliknięciu przycisku "Nowy spr
 
 ### Dodawanie zespołów/pracowników
 
-Analogicznie do innych
+Analogicznie do innych.
