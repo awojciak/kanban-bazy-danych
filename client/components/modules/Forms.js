@@ -213,7 +213,11 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
                 </label>
                 <label>
                     Status:
-                    <input name="status" value={task.status} onChange={handleChange} />
+                    <select name="status" value={task.status} onChange={handleChange}>
+                        <option>ToDo</option>
+                        <option>InProgress</option>
+                        <option>Done</option>
+                    </select>
                 </label>
                 <label>
                     Tagi:
@@ -631,4 +635,63 @@ export const AddPersonModalForm = ({ isOpen, closeCb, teams }) => {
             <button onClick={closeCb}>Zamknij</button>
         </ReactModal>
     );
+}
+
+export const SearchTasksByPersonModal = ({ isOpen, closeCb }) => {
+    const style = {
+        content: {
+            height: '200px',
+            width: '400px'
+        }
+    };
+
+    const [tasks, setTasks] = useState(undefined);
+    const [people, setPeople] = useState([]);
+    const [modalOpen, setModalOpen] = useState(-1);
+    const [personId, setPersonId] = useState(null);
+
+    useEffect(() => {
+        axios.get('/allPeople').then((res) => {
+            setPeople(res.data.people);
+        })
+    }, [isOpen]);
+
+    const searchHandler = () => {
+        axios.get('/tasksForPerson/'+personId).then(
+            (res) => {
+                setTasks(res.data.tasks);
+            }
+        );
+    };
+
+    const handleChange = (e) => {
+        setPersonId(e.target.value);
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className={'SearchForm'}>
+                <label>
+                    Pracownik:
+                    <select name="person" onChange={handleChange}>
+                        {people.map((person) => (
+                            <option value={person._id}>{`${person.name} ${person.surname}`}</option>
+                        ))}
+                    </select>
+                </label>
+                <button type="button" onClick={searchHandler}>Szukaj</button>
+            </form>
+            {typeof tasks !== 'undefined' && (
+                <div className={'SearchWrapper'}>
+                    {tasks.map((task, index) => (
+                        <>
+                            <button onClick={() => setModalOpen(index)}>{task.name}</button>
+                            <TaskModalForm id={task._id} isOpen={modalOpen === index} closeCb={() => setModalOpen(-1)} />
+                        </>
+                    ))}
+                </div>
+            )}
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    )
 }

@@ -63,10 +63,16 @@ router.get('/getTabId/:sprint/:team', (req, res) => {
   var sprintId = req.params.sprint;
   var teamId = req.params.team;
 
-  sprintForTeam.findOne({ sprint: sprintId, team: teamId }, (req, innerRes) => {
-    res.json({
-      tabId: innerRes["_id"]
-    });
+  sprintForTeam.findOne({ sprint: sprintId, team: teamId }, (err, innerRes) => {
+    if(innerRes === null) {
+      res.json({
+        tabId: null
+      });
+    } else {
+      res.json({
+        tabId: innerRes["_id"]
+      });
+    }
   });
 });
 
@@ -350,5 +356,29 @@ router.route('/newTeam').post(
     });
   }
 );
+
+router.get('/allPeople', (req, res) => {
+  person.aggregate([{
+    $project: {
+      "_id": 1,
+      "name": 1,
+      "surname": 1
+    }
+  }]).then((innerRes) => {
+    res.json({
+      people: innerRes,
+    })
+  })
+});
+
+router.get('/tasksForPerson/:id', (req, res) => {
+  var id = req.params.id;
+
+  task.find({ person: id }, (err, innerRes) => {
+    res.json({
+      tasks: innerRes
+    })
+  });
+});
 
 module.exports = router;
