@@ -150,12 +150,13 @@ router.get('/deleteTask/:id', (req, res) => {
 
 router.route('/updateTask').post(
   (req, res) => {
+    console.log(req.body);
     var updates = {
       name: req.body.name,
       plannedTime: Number(req.body.plannedTime),
       spentTime: Number(req.body.spentTime),
       status: req.body.status,
-      person: (req.body.person === 'Brak wykonawcy') ? null : mongoose.Types.ObjectId(req.body.person),
+      person: (req.body.person === '') ? null : mongoose.Types.ObjectId(req.body.person),
       description: req.body.description,
       blocked: (req.body.blocked === 'true'),
       tags: req.body.tags.split(' ').filter((tag) => tag !== ''),

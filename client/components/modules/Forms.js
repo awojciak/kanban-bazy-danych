@@ -214,9 +214,9 @@ export const TaskModalForm = ({ isOpen, closeCb, id }) => {
                 <label>
                     Status:
                     <select name="status" value={task.status} onChange={handleChange}>
-                        <option>ToDo</option>
-                        <option>InProgress</option>
-                        <option>Done</option>
+                        <option value={"ToDo"}>ToDo</option>
+                        <option value={"InProgress"}>InProgress</option>
+                        <option value={"Done"}>Done</option>
                     </select>
                 </label>
                 <label>
