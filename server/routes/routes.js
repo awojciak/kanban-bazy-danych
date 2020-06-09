@@ -32,7 +32,8 @@ router.get('/sprintForTeam/:id', (req, res) => {
               backlogs: backlogs,
               number: sprintData.number,
               start: sprintData.start.toDateString(),
-              end: sprintData.end.toDateString()
+              end: sprintData.end.toDateString(),
+              goal: initData.goal
             }
           );
         });
@@ -381,5 +382,19 @@ router.get('/tasksForPerson/:id', (req, res) => {
     })
   });
 });
+
+router.route('/setGoal').post(
+  (req, res) => {
+    var updates = {
+      goal: req.body.goal
+    }
+
+    sprintForTeam.update({ _id: req.body._id }, updates, (err, _raw) => {
+      if(!err) {
+        res.send("Zapisano!");
+      }
+    });
+  }
+);
 
 module.exports = router;

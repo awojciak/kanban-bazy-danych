@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import axios from 'axios';
 import '../../css/App.css';
-import { BacklogModalForm, TaskModalForm, AddTaskModalForm, AddBacklogModalForm } from './Forms';
+import { BacklogModalForm, TaskModalForm, AddTaskModalForm, AddBacklogModalForm, SetGoalModalForm } from './Forms';
 
 ReactModal.setAppElement("#root")
 
@@ -11,8 +11,8 @@ export const PersonModal = ({ isOpen, closeCb, personId }) => {
 
     const style = {
         content: {
-            height: '200px',
-            width: '400px'
+            height: '100px',
+            width: '300px'
         }
     }
 
@@ -125,6 +125,7 @@ export const BacklogRow = ({ data }) => {
 export const Table = ({ id }) => {
     const [sprint, setSprint] = useState(undefined);
     const [modalOpen, setModalOpen] = useState(false);
+    const [goalModalOpen, setGoalModalOpen] = useState(false);
 
     useEffect(() => {
         axios.get('/sprintForTeam/'+id).then(
@@ -133,6 +134,14 @@ export const Table = ({ id }) => {
             }
         )
     }, [id]);
+
+    const refresh = () => {
+        axios.get('/sprintForTeam/'+id).then(
+            (res) => {
+                setSprint(res.data);
+            }
+        )
+    }
 
     if(typeof sprint === 'undefined') {
         return (
@@ -145,7 +154,32 @@ export const Table = ({ id }) => {
             <div className="TableHeader">
                 {`Sprint ${sprint.number}: ${sprint.start} - ${sprint.end}`}
                 <button onClick={() => setModalOpen(true)}>Nowy backlog</button>
+
+                <button onClick={refresh}>Odśwież</button>
                 <AddBacklogModalForm isOpen={modalOpen} closeCb={() => setModalOpen(false)} tabId={id} />
+
+                <button onClick={() => setGoalModalOpen(true)}>Ustal cel sprintu</button>
+                <SetGoalModalForm isOpen={goalModalOpen} closeCb={() => setGoalModalOpen(false)} id={id} goal={sprint.goal || ''} />
+            </div>
+            {sprint.goal.length > 0 && (
+                <div className="Goal">
+                    <div className="GoalHeader">Cel sprintu</div>
+                    <div className="GoalContent">{sprint.goal}</div>
+                </div>
+            )}
+            <div className="BacklogRow">
+                <div className="BacklogCol">
+                    <span className="ColHeader">Backlogi</span>
+                </div>
+                <div className="BacklogCol">
+                    <span className="ColHeader">To do</span>
+                </div>
+                <div className="BacklogCol">
+                    <span className="ColHeader">In progress</span>
+                </div>
+                <div className="BacklogCol">
+                    <span className="ColHeader">Done</span>
+                </div>
             </div>
             {sprint.backlogs.map((backlog) => <BacklogRow data={backlog} />)}
         </div>

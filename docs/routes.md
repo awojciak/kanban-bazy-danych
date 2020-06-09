@@ -25,6 +25,7 @@
 ## edytujące dane
 1. /updateTask - aktualizuje szczegóły danego zadania
 2. /updateBacklog - aktualizuje szczegóły danego backlogu
+3. /setGoal - ustawia cel dla danego sprintu
 
 ## usuwające dane
 1. /deleteTask/:id - usuwa dane zadanie

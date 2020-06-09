@@ -73,7 +73,7 @@ function App() {
                 <Table id={tabId} />
               ) : (
                 <div className="TableHeader">
-                  {!error ? 'Wybierz sprint za pomocą formularza': 'Wystąpił błąd. Tablica nie istnieje. Wybierz inną.'}
+                  {!error ? 'Wybierz sprint za pomocą formularza': 'Tablica nie istnieje. Wybierz inną.'}
                 </div>
             )}
           </Route>

@@ -479,7 +479,7 @@ export const AddBacklogModalForm = ({ isOpen, closeCb, tabId }) => {
 export const AddSprintModalForm = ({ isOpen, closeCb }) => {
     const style = {
         content: {
-            height: '200px',
+            height: '100px',
             width: '400px'
         }
     }
@@ -533,7 +533,7 @@ export const AddSprintModalForm = ({ isOpen, closeCb }) => {
 export const AddTeamModalForm = ({ isOpen, closeCb }) => {
     const style = {
         content: {
-            height: '200px',
+            height: '100px',
             width: '400px'
         }
     }
@@ -577,7 +577,7 @@ export const AddTeamModalForm = ({ isOpen, closeCb }) => {
 export const AddPersonModalForm = ({ isOpen, closeCb, teams }) => {
     const style = {
         content: {
-            height: '200px',
+            height: '100px',
             width: '400px'
         }
     }
@@ -694,4 +694,52 @@ export const SearchTasksByPersonModal = ({ isOpen, closeCb }) => {
             <button onClick={closeCb}>Zamknij</button>
         </ReactModal>
     )
+}
+
+export const SetGoalModalForm = ({ isOpen, closeCb, id, goal }) => {
+    const style = {
+        content: {
+            height: '100px',
+            width: '400px'
+        }
+    }
+
+    const [newGoal, setNewGoal] = useState({
+        _id: id,
+        goal: goal
+    });
+
+    const saveGoal = () => {
+        axios.post(
+            '/setGoal',
+            querystring.stringify(newGoal), 
+            {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        ).finally(() => {
+            closeCb()
+        })
+    }
+
+    const handleChange = (e) => {
+        setNewGoal({
+            ...newGoal,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    return (
+        <ReactModal isOpen={isOpen} style={style}>
+            <form className="BacklogForm">
+                <label>
+                    Cel sprintu: 
+                    <textarea name="goal" value={newGoal.goal} onChange={handleChange} />
+                </label>
+            </form>
+            <button type="button" onClick={saveGoal}>Zapisz cel sprintu</button>
+            <button onClick={closeCb}>Zamknij</button>
+        </ReactModal>
+    );
 }
