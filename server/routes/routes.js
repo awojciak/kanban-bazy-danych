@@ -151,7 +151,6 @@ router.get('/deleteTask/:id', (req, res) => {
 
 router.route('/updateTask').post(
   (req, res) => {
-    console.log(req.body);
     var updates = {
       name: req.body.name,
       plannedTime: Number(req.body.plannedTime),
